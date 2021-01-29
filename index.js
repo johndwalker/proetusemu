@@ -62,10 +62,6 @@ app.get("/", async (req, res) => {
     for (const _case of unassignedCases) {
       logger.verbose("Processing case \"" + _case._id + "\".");
   
-      if (_case.product.localeCompare("") == 0) {
-        _case.product = "NULL";
-        logger.verbose("_case.product set to \"NULL\".");
-      }
       if (_case.caseOrigin.localeCompare("Salesforce") == 0) {
         _case.caseOrigin = "SF";
         logger.verbose("_case.caseOrigin set to \"SF\".");
@@ -83,7 +79,7 @@ app.get("/", async (req, res) => {
 	           //['Kanaka', 'Condrey'],
 	           ['eDir', 'eDirectory'],
 	           ['eDirectory', 'eDirectory'],
-	           ['IDM', 'IDM Standard Edition'],
+	           ['IDM', 'IDM Advanced Edition'],
 	           ['Client', 'Client'],
 	           ['Filr', 'Filr Standard Edition'],
 	           ['GW', 'GroupWise'],
@@ -106,6 +102,8 @@ app.get("/", async (req, res) => {
 	           ['EA', 'Enterprise Analyzer - Analyst Client'],
 	           ['Enterprise Analyzer', 'Enterprise Analyzer - Analyst Client'],
 	           ['TGAudit', 'TGAudit'],
+	           ['StarTeam', 'StarTeam Enterprise'],
+	           ['MFA', 'Mainframe Access Suite'],
 	           ['Enterprise Server', 'Enterprise Server'],
 	           ['ES', 'Enterprise Server']
       ];
@@ -117,6 +115,10 @@ app.get("/", async (req, res) => {
       if (_case.product.localeCompare(" ") == 0) {
         _case.product = "";
         logger.verbose("_case.product set to empty string.");
+      }
+      if (_case.product.localeCompare("") == 0) {
+        _case.product = "NULL";
+        logger.verbose("_case.product set to \"NULL\".");
       }
       for (i = 0; i < queues.length; i++) {
         if (subjectSplit[0].localeCompare(queues[i][0]) == 0) {
