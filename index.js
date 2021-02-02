@@ -1,6 +1,7 @@
 var config = require('./config');
 const express = require("express");
 const app = express();
+const router = express.Router();
 const { MongoClient } = require('mongodb');
 const winston = require('winston');
 const { createLogger, format, transports } = require('winston');
@@ -36,9 +37,17 @@ if (process.env.NODE_ENV !== 'production') {
 const MONGO_UNASSIGNED_COLLECTION = 'unassigned';
 var unassignedCases = [];
 
+// /* http://<ip>:<port>/owner */
+// router.get('/owner', function( req, res, next) {
+//   logger.info("Incoming GET request for /owner from \"" + req.ip + "\".");
+//   res.send('<html>Hello there!</html>');
+// })
+
+app.use('/', router);
+
 app.get("/", async (req, res) => {
   const client = new MongoClient(config.MONGO_URI, {useNewUrlParser: true, useUnifiedTopology: true});
-  logger.info("Incoming GET request from IP \"" + req.ip + "\".");
+  logger.info("Incoming GET request for / from \"" + req.ip + "\".");
   try {
     // Connect the client to the server
     await client.connect();
@@ -129,9 +138,11 @@ app.get("/", async (req, res) => {
         _case.product = subjectRouting;
         logger.verbose("_case.product set to \"" + _case.product + "\".");
       }
+
+      const sfDirectLink = `<a href="${_case.url}" target="_blank">${_case._id}</a>`;
   
       body += _case.logTime + "|" + 
-              _case._id + "|" +
+              sfDirectLink + "|" +
               _case.product + "|" +
               _case.severity + "||" +
               _case.caseOrigin + "||" +
@@ -153,6 +164,8 @@ app.get("/", async (req, res) => {
     logger.debug("Connection closed.");
   } 
 });
+
+
 
 app.listen(config.HTTP_PORT, () => {
   logger.info("Server started on port " + config.HTTP_PORT + ".");
