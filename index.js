@@ -139,10 +139,10 @@ app.get("/", async (req, res) => {
         logger.verbose("_case.product set to \"" + _case.product + "\".");
       }
 
-      const sfDirectLink = `<a href="${_case.url}" target="_blank">${_case._id}</a>`;
+      //const sfDirectLink = `<a href="${_case.url}" target="_blank">${_case._id}</a>`;
   
       body += _case.logTime + "|" + 
-              sfDirectLink + "|" +
+              _case._id + "|" +
               _case.product + "|" +
               _case.severity + "||" +
               _case.caseOrigin + "||" +
